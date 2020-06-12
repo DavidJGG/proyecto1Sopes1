@@ -105,7 +105,7 @@ static struct file_operations operaciones = {
 static int inicio(void)
 {
         proc_create("pp", 0, NULL, &operaciones);
-        printk(KERN_ALERT "David González - 201610648\nHuriel Gómez - 201403841");
+        printk(KERN_ALERT "David González\nHuriel Gómez");
         return 0;
 }
 
