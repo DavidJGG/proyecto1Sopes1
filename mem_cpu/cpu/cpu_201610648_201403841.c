@@ -104,15 +104,15 @@ static struct file_operations operaciones = {
 
 static int inicio(void)
 {
-        proc_create("pp", 0, NULL, &operaciones);
-        printk(KERN_ALERT "David González\nHuriel Gómez");
+        printk(KERN_INFO "David González\nHuriel Gómez");
+        proc_create("cpu_201610648_201403841", 0, NULL, &operaciones);        
         return 0;
 }
 
 static void fin(void)
 {
-        remove_proc_entry("pp", NULL);
-        printk(KERN_ALERT "SISTEMAS OPERATIVOS 1\n");
+        printk(KERN_INFO "SISTEMAS OPERATIVOS 1\n");
+        remove_proc_entry("cpu_201610648_201403841", NULL);        
 }
 
 module_init(inicio);

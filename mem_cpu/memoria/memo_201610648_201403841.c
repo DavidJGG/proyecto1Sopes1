@@ -31,7 +31,7 @@ static int infoMemoria(struct seq_file *arch, void *v){
         seq_printf(arch, "*     Carné:   201403841           *\n");
         seq_printf(arch, "*     Nombre:  Huriel Gómez        *\n");
         seq_printf(arch, "************************************\n");
-        seq_printf(arch, "*         MODULO DE MEMORIA         *\n");
+        seq_printf(arch, "*         MODULO DE MEMORIA        *\n");
         seq_printf(arch, "************************************\n");
 
 	si_meminfo(&info);
@@ -65,15 +65,15 @@ static struct file_operations operaciones ={
 
 static int inicio(void)
 {
-        proc_create("pp", 0, NULL, &operaciones);
-        printk(KERN_ALERT "201610648\n201403841");
+        printk(KERN_INFO "201610648\n201403841");
+        proc_create("memo_201610648_201403841", 0, NULL, &operaciones);        
         return 0;
 }
 
 static void fin(void)
 {
-        remove_proc_entry("pp", NULL);
-        printk(KERN_ALERT "Sistemas Operativos 1\n");
+        printk(KERN_INFO "Sistemas Operativos 1\n");
+        remove_proc_entry("memo_201610648_201403841", NULL);        
 }
 
 module_init(inicio);
