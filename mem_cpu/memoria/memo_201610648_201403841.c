@@ -20,9 +20,20 @@ struct sysinfo info;
 static int infoMemoria(struct seq_file *arch, void *v){ 
 
 	unsigned long megas=1024*1024;
-    unsigned long total = 0;
-    unsigned long libre = 0;
+        unsigned long total = 0;
+        unsigned long libre = 0;
 	unsigned long unidad = 0;
+
+        seq_printf(arch, "************************************\n");
+        seq_printf(arch, "*     Carné:   201610648           *\n");
+        seq_printf(arch, "*     Nombre:  David González      *\n");
+        seq_printf(arch, "*----------------------------------*\n");
+        seq_printf(arch, "*     Carné:   201403841           *\n");
+        seq_printf(arch, "*     Nombre:  Huriel Gómez        *\n");
+        seq_printf(arch, "************************************\n");
+        seq_printf(arch, "*         MODULO DE MEMORIA         *\n");
+        seq_printf(arch, "************************************\n");
+
 	si_meminfo(&info);
 	unidad = (unsigned long)info.mem_unit;
 	total = info.totalram * unidad;
