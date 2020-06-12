@@ -58,22 +58,22 @@ static int evento_abrir(struct inode *inode, struct file *file){
         return single_open(file, infoMemoria, NULL);
 };
 
-static struct file_operations operaciones ={
+static struct file_operations operaciones = {
         .open=evento_abrir,
         .read = seq_read
 };
 
 static int inicio(void)
 {
-        printk(KERN_INFO "201610648\n201403841");
-        proc_create("memo_201610648_201403841", 0, NULL, &operaciones);        
+	proc_create("memo_201610648_201403841", 0, NULL, &operaciones);
+        printk(KERN_INFO "Carne: 201610648 -- 201403841\n");           
         return 0;
 }
 
 static void fin(void)
-{
-        printk(KERN_INFO "Sistemas Operativos 1\n");
-        remove_proc_entry("memo_201610648_201403841", NULL);        
+{        
+        remove_proc_entry("memo_201610648_201403841", NULL);   
+	printk(KERN_INFO "Curso: Sistemas Operativos 1\n");     
 }
 
 module_init(inicio);
