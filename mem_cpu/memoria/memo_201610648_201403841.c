@@ -47,11 +47,6 @@ static int infoMemoria(struct seq_file *arch, void *v){
 	seq_printf(arch, "Memoria usada:\t%lu %%\n", ((total-libre)*100)/total);
 
 	return 0;
-
-        //seq_printf(arch, "Memoria Total: \t %lu MB\n", (info.totalram * 4)/1024);
-        //seq_printf(arch, "Memoria Libre: \t %lu MB\n", (info.freeram * 4)/1024);
-        //seq_printf(arch, "Memoria usada: \t %lu %%\n", ((info.freeram * 4)/(info.totalram * 4))*100);
-        //return 0;
 }
 
 static int evento_abrir(struct inode *inode, struct file *file){
