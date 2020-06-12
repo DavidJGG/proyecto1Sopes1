@@ -101,6 +101,7 @@ static int evento_abrir(struct inode *inode, struct file *file)
 static struct file_operations operaciones = {
     .open = evento_abrir,
     .read = seq_read};
+};
 
 static int inicio(void)
 {
