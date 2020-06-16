@@ -1,0 +1,69 @@
+<%- include("partials/_header")  %>
+<div class="container">
+    <br>
+    <h1 class="text-center">Childres Process</h1>
+    <br>
+</div>
+
+<div class="text-center">
+    <label class="text-center">PID: </label>
+    <input type="text" id="pidP" disabled size="8" value="<%=data%>"></input>
+    <label id="lateral"></label>
+    <label class="text-center">Name: </label>
+    <input type="text" id="nameP" disabled size="15" value="-"></input>
+</div>
+<br>
+
+<div class="container">
+    <br>
+    <table class="table" id="table_id">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">PID</th>
+                <th scope="col">Name</th>
+            </tr>
+        </thead>
+        <tbody id="contenido"> </tbody>
+    </table>
+</div>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    var pidP = document.getElementById("pidP").value
+    var contenido = document.querySelector('#contenido')
+    console.log("desde HTML: " + pidP)
+    traer();
+    function traer() {
+        var JSON = $.ajax({
+            url: "http://localhost:3000/process/child/" + pidP,
+            dataType: 'json',
+            async: false
+        }).responseText;
+        var Respuesta = jQuery.parseJSON(JSON);
+        tabla(Respuesta.key)
+        
+    }
+    function tabla(datos) {
+        console.log(datos)
+        contenido.innerHTML = ''
+        var cont = 1;
+        
+        for (let valor of datos) {
+            if(cont == 1){
+                document.getElementById("nameP").value = valor.namep ;
+            }
+            contenido.innerHTML += `
+            <tr>
+                <td scope="row">${ cont++}</td>
+                <td>${valor.pid}</td>
+                <td>${valor.name}</td>
+            </tr>
+            `
+        }
+    }
+</script>
+<%- include("partials/_footer")  %>

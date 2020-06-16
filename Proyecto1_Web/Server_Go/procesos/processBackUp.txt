@@ -1,0 +1,153 @@
+package procesos
+
+import (	
+	"net/http"
+	"encoding/json"
+	"fmt"
+	"github.com/gorilla/mux"
+
+	//"container/list"
+	//"strings"
+    "io/ioutil"
+	"log"
+	"strconv"
+)
+
+type Processes struct{
+	Ejecucion Process `json:"ejecucion,omitempty"`
+}
+
+type Process struct{
+	PID 	string `json:"pid,omitempty"`
+	Nombre 	string `json:"name,omitempty"`
+	Usuario string `json:"user,omitempty"`
+	Estado 	string `json:"state,omitempty"`
+	RAM 	string `json:"ram,omitempty"`
+}
+
+
+
+func ProcessData(w http.ResponseWriter, r *http.Request){
+
+	/*			REGISTRANDO TODA LA INFORMACION PARA MOSTRAR		*/
+	archivos, err := ioutil.ReadDir("/proc")
+    if err != nil {
+        log.Fatal(err)
+	}
+	var nProcesos int = 0;
+    for _, carpetaProceso := range archivos {
+		if(carpetaProceso.IsDir()){
+			numDir, error := strconv.Atoi(carpetaProceso.Name())
+			if error == nil {
+				nProcesos++;
+				numDir++;
+				fmt.Println("PID:", carpetaProceso.Name())
+				//Recorrer los archivos para obtener: 
+					//- Nombre del proceso
+					//- Usuario
+					//- Estado
+					//- %RAM
+			}
+		}
+	}
+	fmt.Println("No. procesos: ", nProcesos)
+
+
+	/*			CODIGO PARA ENVIAR EN LA API			*/
+
+
+	x := make(map[string][]Process)
+
+    x["key"] = append(x["key"], Process{"111", "process1","root","C","15%"})
+	x["key"] = append(x["key"], Process{"222", "process2","huriel","T","5.5%"})
+	x["key"] = append(x["key"], Process{"333", "process3","huriel","T","5.5%"})
+	
+    //fmt.Println(x["key"][0])
+    //fmt.Println(x["key"][1])
+
+	processResponse := x
+
+	jsonResponse, errorjson := json.Marshal(processResponse)
+
+	if errorjson != nil {
+		http.Error(w, errorjson.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.WriteHeader(http.StatusOK)
+	w.Write(jsonResponse)
+}
+
+type ResponseResult struct {
+	Id string `json:"id"`
+}
+
+func KillProcess(response http.ResponseWriter, request *http.Request) {
+	vars := mux.Vars(request)
+	id := vars["id"]
+	respondWithJSON(response, http.StatusOK, ResponseResult{Id: id})
+
+	fmt.Println("kill process: ", id)
+	/*
+
+			AQUI VA EL CODIGO PARA MATAR EL PROCESO
+	
+	*/
+
+}
+
+func respondWithJSON(response http.ResponseWriter, statusCode int, data interface{}) {
+	//result, _ := json.Marshal(data) // Puedo retornan la misma data o un boolean
+	result, _ := json.Marshal(true)
+	response.Header().Set("Content-Type", "application/json")
+	response.WriteHeader(statusCode)
+	response.Write(result)
+	//fmt.Println("hola")
+
+	
+}
+
+
+
+
+
+
+
+
+
+/*
+package main
+
+import (
+    
+)
+
+func main() {
+    archivos, err := ioutil.ReadDir("/proc")
+    if err != nil {
+        log.Fatal(err)
+	}
+	var nProcesos int = 0;
+    for _, carpetaProceso := range archivos {
+		if(carpetaProceso.IsDir()){
+			numDir, error := strconv.Atoi(carpetaProceso.Name())
+			if error == nil {
+				nProcesos++;
+				numDir++;
+				fmt.Println("PID:", carpetaProceso.Name())
+				//Recorrer los archivos para obtener: 
+					//- Nombre del proceso
+					//- Usuario
+					//- Estado
+					//- %RAM
+				
+			
+			}
+		}
+	}
+	fmt.Println("No. procesos: ", nProcesos)
+
+}
+
+*/

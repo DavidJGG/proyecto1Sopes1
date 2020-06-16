@@ -1,0 +1,110 @@
+<%- include("partials/_header")  %>
+
+<div class="container">
+    <br>
+    <h1 class="text-center">Process Manager</h1>
+    <br>
+</div>
+
+<div class="container">
+    <div class="text-center">
+        <label class="text-center">Running:  </label>
+        <input type="text" id="running" disabled size="3" value="0"></input>
+        <label id="lateral"></label>
+        <label class="text-center">Sleeping:  </label>
+        <input type="text" id="sleeping" disabled size="3" value="0"></input>
+        <label id="lateral"></label>
+        <label class="text-center">Stoped:  </label>
+        <input type="text" id="stoped" disabled size="3" value="0"></input>
+        <label id="lateral"></label>
+        <label class="text-center">Zombie:  </label>
+        <input type="text" id="zombie" disabled size="3" value="0"></input>
+        <label id="lateral"></label>
+        <label class="text-center">Total Process:  </label>
+        <input type="text" id="total" disabled size="3" value="0"></input>
+    </div>
+    <br>
+    <table class="table" id="table_id">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">PID</th>
+                <th scope="col">Name</th>
+                <th scope="col">User</th>
+                <th scope="col">State</th>
+                <th scope="col">%RAM</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody id="contenido"></tbody>
+    </table>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
+<script>
+    var contenido = document.querySelector('#contenido')
+    traer()
+    traerTotal()
+    function traer() {
+        setInterval(function () {
+            var JSON = $.ajax({
+                url: "http://localhost:3000/process",
+                dataType: 'json',
+                async: false
+            }).responseText;
+            var Respuesta = jQuery.parseJSON(JSON);
+            tabla(Respuesta.key)
+        }, 3000);
+    }
+
+    function tabla(datos) {
+        contenido.innerHTML = ''
+        var cont = 0;
+        for (let valor of datos) {
+            contenido.innerHTML += `
+            <tr>
+                <td scope="row">${ cont++}</td>
+                <td>${valor.pid}</td>
+                <td>${valor.name}</td>
+                <td>${valor.user}</td>
+                <td>${valor.state}</td>
+                <td>${valor.ram}</td>
+                <td>
+                    <button class="btn btn-danger navbar-btn" onclick="killProcess(\'${valor.pid}\')">Kill Process</button>
+                    <a class="btn btn-info navbar-btn" href="/children/${valor.pid}">Child Processes</a>
+                </td>
+            </tr>
+            `
+        }
+    }
+
+    function traerTotal() {
+        setInterval(function () {
+            var JSON = $.ajax({
+                url: "http://localhost:3000/process/total",
+                dataType: 'json',
+                async: false
+            }).responseText;
+            var Respuesta = jQuery.parseJSON(JSON);
+            document.getElementById("running").value    = Respuesta.running;
+            document.getElementById("sleeping").value   = Respuesta.sleeping;
+            document.getElementById("stoped").value     = Respuesta.stoped;
+            document.getElementById("zombie").value     = Respuesta.zombie;
+            document.getElementById("total").value      = Respuesta.total;
+        }, 3500);
+    }
+
+    
+    function killProcess(id){
+
+        var JSON = $.ajax({
+                url: "http://localhost:3000/process/"+id,
+                dataType: 'json',
+                async: false
+            }).responseText;
+    }
+    
+    
+</script>
+
+<%- include("partials/_footer")  %>

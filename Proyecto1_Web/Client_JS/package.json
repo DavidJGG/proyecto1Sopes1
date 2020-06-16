@@ -1,0 +1,25 @@
+{
+  "name": "Client_JS",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src",
+    "dev": "nodemon src"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "ejs": "^3.1.3",
+    "express": "^4.17.1",
+    "memory-cache": "^0.2.0",
+    "morgan": "^1.10.0",
+    "node-fetch": "^2.6.0",
+    "nodeQuery": "0.0.9-1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
